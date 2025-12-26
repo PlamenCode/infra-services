@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-site
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-site
+  template:
+    metadata:
+      labels:
+        app: devops-site
+    spec:
+      containers:
+      - name: devops-site
+        image: plamencode/devops-site:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
