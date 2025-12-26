@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tik-tak-toe
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tik-tak-toe
+  template:
+    metadata:
+      labels:
+        app: tik-tak-toe
+    spec:
+      containers:
+      - name: tik-tak-toe
+        image: plamencode/tik-tak-toe:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always

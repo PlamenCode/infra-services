@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordle
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordle
+  template:
+    metadata:
+      labels:
+        app: wordle
+    spec:
+      containers:
+      - name: wordle
+        image: plamencode/wordle-clone:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always

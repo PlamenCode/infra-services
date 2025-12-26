@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hangman
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hangman
+  template:
+    metadata:
+      labels:
+        app: hangman
+    spec:
+      containers:
+      - name: hangman
+        image: plamencode/hangman:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always

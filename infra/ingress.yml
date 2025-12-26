@@ -1,0 +1,83 @@
+apiVersion: networking.k8s.io/v1
+kind Ingress
+metadata:
+  name: games-ingress
+  namespace: default
+spec:
+  rules:
+    - host: dino.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dino
+                port:
+                  number: 80
+
+    - host: tik-tak-toe.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tik-tak-toe
+                port:
+                  number: 80
+
+    - host: flappy-bird.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: flappy-bird
+                port:
+                  number: 80
+
+    - host: hangman.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hangman
+                port:
+                  number: 80
+
+    - host: wordle.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: wordle
+                port:
+                  number: 80
+
+    - host: wach-a-mole.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: wach-a-mole
+                port:
+                  number: 80
+
+    - host: dog-quiz.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dog-quiz
+                port:
+                  number: 80

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wach-a-mole
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wach-a-mole
+  template:
+    metadata:
+      labels:
+        app: wach-a-mole
+    spec:
+      containers:
+      - name: wach-a-mole
+        image: plamencode/wach-a-mole:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always

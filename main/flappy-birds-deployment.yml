@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flappy-birds
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flappy-birds
+  template:
+    metadata:
+      labels:
+        app: flappy-birds
+    spec:
+      containers:
+      - name: flappy-birds
+        image: plamencode/flappy-birds-clone:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
