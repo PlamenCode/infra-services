@@ -81,3 +81,14 @@ spec:
                 name: dog-quiz
                 port:
                   number: 80
+
+    - host: plamenDevops.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: devops-site
+                port:
+                  number: 80
