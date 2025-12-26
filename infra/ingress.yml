@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   rules:
-    - host: dino.example.com
+    - host: dino.devopsplamen.work
       http:
         paths:
           - path: /
@@ -16,7 +16,7 @@ spec:
                 port:
                   number: 80
 
-    - host: tik-tak-toe.example.com
+    - host: tik-tak-toe.devopsplamen.work
       http:
         paths:
           - path: /
@@ -27,7 +27,7 @@ spec:
                 port:
                   number: 80
 
-    - host: flappy-bird.example.com
+    - host: flappy-bird.devopsplamen.work
       http:
         paths:
           - path: /
@@ -38,7 +38,7 @@ spec:
                 port:
                   number: 80
 
-    - host: hangman.example.com
+    - host: hangman.devopsplamen.work
       http:
         paths:
           - path: /
@@ -49,7 +49,7 @@ spec:
                 port:
                   number: 80
 
-    - host: wordle.example.com
+    - host: wordle.devopsplamen.work
       http:
         paths:
           - path: /
@@ -60,7 +60,7 @@ spec:
                 port:
                   number: 80
 
-    - host: wach-a-mole.example.com
+    - host: wach-a-mole.devopsplamen.work
       http:
         paths:
           - path: /
@@ -71,7 +71,7 @@ spec:
                 port:
                   number: 80
 
-    - host: dog-quiz.example.com
+    - host: dog-quiz.devopsplamen.work
       http:
         paths:
           - path: /
@@ -82,7 +82,7 @@ spec:
                 port:
                   number: 80
 
-    - host: plamenDevops.example.com
+    - host: site.devopsplamen.work
       http:
         paths:
           - path: /
