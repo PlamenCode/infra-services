@@ -1,8 +1,10 @@
 apiVersion: networking.k8s.io/v1
-kind Ingress
+kind: Ingress
 metadata:
   name: games-ingress
-  namespace: default
+  namespace: services
+  annotations:
+    kubernetes.io/ingress.class: traefik
 spec:
   rules:
     - host: dino.devopsplamen.work
@@ -34,7 +36,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: flappy-bird
+                name: flappy-birds
                 port:
                   number: 80
 
