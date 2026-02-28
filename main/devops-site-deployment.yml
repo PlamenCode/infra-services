@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: devops-site
-        image: plamencode/devops-site:3
+        image: plamencode/devops-site:4
         ports:
         - containerPort: 80
         imagePullPolicy: Always
