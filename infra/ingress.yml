@@ -6,6 +6,17 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
+  tls:
+    - hosts:
+        - dino.devopsplamen.work
+        - tik-tak-toe.devopsplamen.work
+        - flappy-bird.devopsplamen.work
+        - hangman.devopsplamen.work
+        - wordle.devopsplamen.work
+        - wach-a-mole.devopsplamen.work
+        - dog-quiz.devopsplamen.work
+        - site.devopsplamen.work
+      secretName: devopsplamen-work-tls
   rules:
     - host: dino.devopsplamen.work
       http:
