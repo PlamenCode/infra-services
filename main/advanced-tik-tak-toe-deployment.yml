@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: advanced-tik-tak-toe
+  namespace: services
+  labels:
+    app: advanced-tik-tak-toe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: advanced-tik-tak-toe
+  template:
+    metadata:
+      labels:
+        app: advanced-tik-tak-toe
+    spec:
+      containers:
+        - name: advanced-tik-tak-toe
+          image: plamencode/three-piece-tik-tak-toe:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

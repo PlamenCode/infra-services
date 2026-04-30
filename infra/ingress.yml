@@ -16,6 +16,8 @@ spec:
         - wach-a-mole.devopsplamen.work
         - dog-quiz.devopsplamen.work
         - site.devopsplamen.work
+        - advanced-tik-tak-toe.devopsplamen.work
+        - expense-tracker.devopsplamen.work
       secretName: devopsplamen-work-tls
   rules:
     - host: dino.devopsplamen.work
@@ -103,5 +105,27 @@ spec:
             backend:
               service:
                 name: devops-site
+                port:
+                  number: 80
+
+    - host: advanced-tik-tak-toe.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: advanced-tik-tak-toe
+                port:
+                  number: 80
+                  
+    - host: expense-tracker.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: expense-tracker
                 port:
                   number: 80
