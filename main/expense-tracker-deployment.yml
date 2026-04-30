@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: expense-tracker
-          image: plamencode/expense-tracker:1
+          image: plamencode/expense-tracker:2
           imagePullPolicy: Always
           ports:
             - name: http

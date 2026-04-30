@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: advanced-tik-tak-toe
-          image: plamencode/three-piece-tik-tak-toe:2
+          image: plamencode/three-piece-tik-tak-toe:1
           imagePullPolicy: Always
           ports:
             - name: http
