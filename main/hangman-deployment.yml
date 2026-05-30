@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: hangman
-        image: plamencode/hangman:latest
+        image: plamencode/hangman:3
         ports:
         - containerPort: 80
         imagePullPolicy: Always
