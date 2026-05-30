@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: dog-quiz
-        image: plamencode/dog-quiz:latest
+        image: plamencode/dog-quiz:3
         ports:
         - containerPort: 80
         imagePullPolicy: Always
