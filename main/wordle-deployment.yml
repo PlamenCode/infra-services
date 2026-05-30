@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: wordle
-        image: plamencode/wordle-clone:latest
+        image: plamencode/wordle-clone:4
         ports:
         - containerPort: 80
         imagePullPolicy: Always

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: wach-a-mole
-        image: plamencode/wach-a-mole:latest
+        image: plamencode/wach-a-mole:3
         ports:
         - containerPort: 80
         imagePullPolicy: Always
