@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: flappy-birds
-        image: plamencode/flappy-birds-clone:latest
+        image: plamencode/flappy-birds-clone:3
         ports:
         - containerPort: 80
         imagePullPolicy: Always
