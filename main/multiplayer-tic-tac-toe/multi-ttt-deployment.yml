@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: multi-ttt
-          image: plamencode/multi-ttt:1
+          image: plamencode/multi-ttt:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
