@@ -7,12 +7,7 @@ metadata:
     app: multi-ttt
 spec:
   replicas: 1
-  revisionHistoryLimit: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: multi-ttt
@@ -27,17 +22,17 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 3000
           readinessProbe:
             httpGet:
-              path: /
-              port: 80
+              path: /ready
+              port: 3000
             initialDelaySeconds: 5
             periodSeconds: 5
-            failureThreshold: 1
+            failureThreshold: 2
           livenessProbe:
             httpGet:
-              path: /
-              port: 80
+              path: /health
+              port: 3000
             initialDelaySeconds: 10
             periodSeconds: 10
