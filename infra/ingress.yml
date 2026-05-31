@@ -18,6 +18,7 @@ spec:
         - site.devopsplamen.work
         - advanced-tik-tak-toe.devopsplamen.work
         - expense-tracker.devopsplamen.work
+        - multi-ttt.devopsplamen.work
       secretName: devopsplamen-work-tls
   rules:
     - host: dino.devopsplamen.work
@@ -127,5 +128,16 @@ spec:
             backend:
               service:
                 name: expense-tracker
+                port:
+                  number: 80
+                  
+    - host: multi-ttt.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: multi-ttt
                 port:
                   number: 80
