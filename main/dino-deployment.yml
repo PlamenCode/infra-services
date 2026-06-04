@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: dino
-        image: plamencode/dino-game:2
+        image: plamencode/dino-game:3
         ports:
         - containerPort: 80
         imagePullPolicy: Always
