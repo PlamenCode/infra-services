@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-ingress
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+    - hosts:
+        - argocd.devopsplamen.work
+      secretName: devopsplamen-work-tls
+
+  rules:
+    - host: argocd.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 80
