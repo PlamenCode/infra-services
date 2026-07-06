@@ -14,8 +14,16 @@ spec:
         app: devops-site
     spec:
       containers:
-      - name: devops-site
-        image: plamencode/devops-site:14
-        ports:
-        - containerPort: 80
-        imagePullPolicy: Always
+        - name: devops-site
+          image: plamencode/devops-site:14
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: devops-site-auth
+          env:
+            - name: AUTH_SECURE_COOKIES
+              value: "true"
+            - name: PORT
+              value: "8080"
