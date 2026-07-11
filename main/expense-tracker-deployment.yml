@@ -35,6 +35,9 @@ spec:
           ports:
             - name: http
               containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: expense-tracker-auth
           env:
             - name: NODE_ENV
               value: production
