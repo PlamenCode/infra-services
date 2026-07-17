@@ -10,7 +10,6 @@ spec:
   tls:
     - hosts:
         - grafana.devopsplamen.work
-        - prometheus.devopsplamen.work
       secretName: devopsplamen-work-tls
   rules:
     - host: grafana.devopsplamen.work
@@ -20,10 +19,3 @@ spec:
             pathType: Prefix
             backend:
               service: {name: grafana, port: {number: 3000}}
-    - host: prometheus.devopsplamen.work
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service: {name: prometheus, port: {number: 9090}}

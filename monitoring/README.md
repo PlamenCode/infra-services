@@ -20,10 +20,12 @@ are namespace-scoped. If it currently exists in another namespace, copy/recreate
 Point these DNS records at the cluster ingress address:
 
 - `grafana.devopsplamen.work`
-- `prometheus.devopsplamen.work`
 
 Apply `argocd/monitoring-application.yml` once (or add it to the bootstrap process),
 then Argo CD manages everything under this directory.
 
 Prometheus and Grafana also use PVCs, but old Docker volume contents are not copied
 automatically.
+
+Prometheus is intentionally not exposed by Ingress. Access its UI when needed with
+`kubectl -n monitoring port-forward service/prometheus 9090:9090`.
