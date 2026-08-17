@@ -22,7 +22,7 @@ spec:
     spec:
       initContainers:
         - name: seed-hesk
-          image: docker.io/library/hesk-local:3.7.10
+          image: docker.io/library/hesk-local:3.7.11
           imagePullPolicy: Never
 
           command:
@@ -45,7 +45,7 @@ spec:
 
       containers:
         - name: hesk
-          image: docker.io/library/hesk-local:3.7.10
+          image: docker.io/library/hesk-local:3.7.11
           imagePullPolicy: Never
 
           ports:
