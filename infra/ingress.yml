@@ -5,6 +5,7 @@ metadata:
   namespace: services
   annotations:
     kubernetes.io/ingress.class: traefik
+
 spec:
   tls:
     - hosts:
@@ -19,7 +20,9 @@ spec:
         - advanced-tik-tak-toe.devopsplamen.work
         - expense-tracker.devopsplamen.work
         - multi-ttt.devopsplamen.work
+        - support.devopsplamen.work
       secretName: devopsplamen-work-tls
+
   rules:
     - host: dino.devopsplamen.work
       http:
@@ -119,7 +122,7 @@ spec:
                 name: advanced-tik-tak-toe
                 port:
                   number: 80
-                  
+
     - host: expense-tracker.devopsplamen.work
       http:
         paths:
@@ -130,7 +133,7 @@ spec:
                 name: expense-tracker
                 port:
                   number: 80
-                  
+
     - host: multi-ttt.devopsplamen.work
       http:
         paths:
@@ -139,5 +142,16 @@ spec:
             backend:
               service:
                 name: multi-ttt
+                port:
+                  number: 80
+
+    - host: support.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hesk
                 port:
                   number: 80

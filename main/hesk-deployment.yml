@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hesk
+  namespace: services
+
+spec:
+  replicas: 1
+
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: hesk
+
+  template:
+    metadata:
+      labels:
+        app: hesk
+
+    spec:
+      initContainers:
+        - name: seed-hesk
+          image: docker.io/library/hesk-local:3.7.10
+          imagePullPolicy: Never
+
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+
+              if [ ! -f /work/index.php ]; then
+                echo "Initializing HESK files..."
+                cp -a /opt/hesk/. /work/
+                chown -R www-data:www-data /work
+              else
+                echo "Existing HESK installation found."
+              fi
+
+          volumeMounts:
+            - name: hesk-storage
+              mountPath: /work
+
+      containers:
+        - name: hesk
+          image: docker.io/library/hesk-local:3.7.10
+          imagePullPolicy: Never
+
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
+          volumeMounts:
+            - name: hesk-storage
+              mountPath: /var/www/html
+
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+
+            limits:
+              cpu: 300m
+              memory: 256Mi
+
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 6
+
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+
+      volumes:
+        - name: hesk-storage
+          persistentVolumeClaim:
+            claimName: hesk-data

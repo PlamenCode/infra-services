@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hesk-db
+  namespace: services
+
+spec:
+  replicas: 1
+
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: hesk-db
+
+  template:
+    metadata:
+      labels:
+        app: hesk-db
+
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:11.4
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: mysql
+              containerPort: 3306
+
+          env:
+            - name: MARIADB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: hesk-db-secret
+                  key: DB_NAME
+
+            - name: MARIADB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: hesk-db-secret
+                  key: DB_USER
+
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hesk-db-secret
+                  key: DB_PASSWORD
+
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hesk-db-secret
+                  key: MARIADB_ROOT_PASSWORD
+
+          volumeMounts:
+            - name: hesk-db-storage
+              mountPath: /var/lib/mysql
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+          readinessProbe:
+            tcpSocket:
+              port: mysql
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 6
+
+          livenessProbe:
+            tcpSocket:
+              port: mysql
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+
+      volumes:
+        - name: hesk-db-storage
+          persistentVolumeClaim:
+            claimName: hesk-db-data
