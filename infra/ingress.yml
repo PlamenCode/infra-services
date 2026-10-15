@@ -21,6 +21,7 @@ spec:
         - expense-tracker.devopsplamen.work
         - multi-ttt.devopsplamen.work
         - support.devopsplamen.work
+        - car-tracker.devopsplamen.work
       secretName: devopsplamen-work-tls
 
   rules:
@@ -153,5 +154,16 @@ spec:
             backend:
               service:
                 name: hesk
+                port:
+                  number: 80
+    
+    - host: car-tracker.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: car-tracker
                 port:
                   number: 80
