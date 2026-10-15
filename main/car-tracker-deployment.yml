@@ -36,7 +36,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: car-tracker
-          image: plamencode/car-tracker:1
+          image: plamencode/car-tracker:4
           imagePullPolicy: Always
           ports:
             - name: http
