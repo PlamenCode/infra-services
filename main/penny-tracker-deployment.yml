@@ -34,7 +34,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: penny-tracker
-          image: plamencode/penny-tracker:1
+          image: plamencode/penny-tracker:2
           imagePullPolicy: Always
           securityContext:
             runAsUser: 1000
