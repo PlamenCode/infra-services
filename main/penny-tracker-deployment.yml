@@ -47,6 +47,10 @@ spec:
             - secretRef:
                 name: expense-tracker-auth
           env:
+            - name: SHARED_AUTH_COOKIE_DOMAIN
+              value: .devopsplamen.work
+            - name: SHARED_AUTH_COOKIE_NAME
+              value: devops_private_auth
             - name: NODE_ENV
               value: production
             - name: PORT
