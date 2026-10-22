@@ -19,6 +19,7 @@ spec:
         - site.devopsplamen.work
         - advanced-tik-tak-toe.devopsplamen.work
         - expense-tracker.devopsplamen.work
+        - penny-tracker.devopsplamen.work
         - multi-ttt.devopsplamen.work
         - support.devopsplamen.work
         - car-tracker.devopsplamen.work
@@ -132,6 +133,17 @@ spec:
             backend:
               service:
                 name: expense-tracker
+                port:
+                  number: 80
+
+    - host: penny-tracker.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: penny-tracker
                 port:
                   number: 80
 
