@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - advanced-tik-tak-toe-deployment.yml
+  - advanced-tik-tak-toe-service.yml
+  - car-tracker-deployment.yml
+  - car-tracker-service.yml
+  - devops-site-deployment.yml
+  - devops-site-service.yml
+  - dino-deployment.yml
+  - dino-service.yml
+  - dog-quiz-deployment.yml
+  - dog-quiz-service.yml
+  - expense-tracker-deployment.yml
+  - expense-tracker-service.yml
+  - flappy-birds-deployment.yml
+  - flappy-birds-service.yml
+  - hangman-deployment.yml
+  - hangman-service.yml
+  - hesk-db-deployment.yml
+  - hesk-db-pvc.yml
+  - hesk-db-service.yml
+  - hesk-deployment.yml
+  - hesk-pvc.yml
+  - hesk-service.yml
+  - multi-ttt-deployment.yml
+  - multi-ttt-service.yml
+  - penny-tracker-deployment.yml
+  - penny-tracker-service.yml
+  - tik-tak-toe-deployment.yml
+  - tik-tak-toe-service.yml
+  - wach-a-mole-deployment.yml
+  - wach-a-mole-service.yml
+  - wordle-deployment.yml
+  - wordle-service.yml
