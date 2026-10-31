@@ -33,3 +33,5 @@ resources:
   - wach-a-mole-service.yml
   - wordle-deployment.yml
   - wordle-service.yml
+  - tracker-deployment.yml
+  - tracker-service.yml
