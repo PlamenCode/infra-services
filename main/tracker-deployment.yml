@@ -37,7 +37,7 @@ spec:
       containers:
         - name: tracker
           # Publish this tag successfully before syncing (build run 2 failed Docker Hub login).
-          image: plamencode/tracker:3
+          image: plamencode/tracker:4
           imagePullPolicy: Always
           ports:
             - name: http
