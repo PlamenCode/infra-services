@@ -1,0 +1,15 @@
+# Service name
+- op: replace
+  path: /metadata/name
+  value: expense-tracker
+
+# Service labels
+- op: add
+  path: /metadata/labels
+  value:
+    app: expense-tracker
+
+# Service selector
+- op: replace
+  path: /spec/selector/app
+  value: expense-tracker

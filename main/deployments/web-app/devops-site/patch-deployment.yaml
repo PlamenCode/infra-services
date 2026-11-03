@@ -1,0 +1,44 @@
+# Deployment name
+- op: replace
+  path: /metadata/name
+  value: devops-site
+
+# Deployment selector
+- op: replace
+  path: /spec/selector/matchLabels/app
+  value: devops-site
+
+# Pod labels
+- op: replace
+  path: /spec/template/metadata/labels/app
+  value: devops-site
+
+# Container name
+- op: replace
+  path: /spec/template/spec/containers/0/name
+  value: devops-site
+
+# Container port
+- op: replace
+  path: /spec/template/spec/containers/0/ports/0/containerPort
+  value: 8080
+
+# Authentication Secret
+- op: add
+  path: /spec/template/spec/containers/0/envFrom
+  value:
+    - secretRef:
+        name: devops-site-auth
+
+# Environment variables
+- op: add
+  path: /spec/template/spec/containers/0/env
+  value:
+    - name: AUTH_SECURE_COOKIES
+      value: "true"
+
+    - name: NODE_ENV
+      value: production
+
+    - name: PORT
+      value: "8080"

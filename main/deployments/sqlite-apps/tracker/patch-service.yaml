@@ -1,0 +1,14 @@
+# Service name
+- op: replace
+  path: /metadata/name
+  value: tracker
+
+# Service selector
+- op: replace
+  path: /spec/selector/app
+  value: tracker
+
+# Named target port
+- op: replace
+  path: /spec/ports/0/targetPort
+  value: http

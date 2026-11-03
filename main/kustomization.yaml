@@ -7,8 +7,7 @@ resources:
   - car-tracker-service.yml
   - devops-site-deployment.yml
   - devops-site-service.yml
-  - dino-deployment.yml
-  - dino-service.yml
+  - deployments/static-games/dino
   - dog-quiz-deployment.yml
   - dog-quiz-service.yml
   - expense-tracker-deployment.yml

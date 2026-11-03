@@ -1,0 +1,56 @@
+# Deployment name
+- op: replace
+  path: /metadata/name
+  value: multi-ttt
+
+# Deployment labels
+- op: add
+  path: /metadata/labels
+  value:
+    app: multi-ttt
+
+# Revision history
+- op: add
+  path: /spec/revisionHistoryLimit
+  value: 3
+
+# Deployment selector
+- op: replace
+  path: /spec/selector/matchLabels/app
+  value: multi-ttt
+
+# Pod labels
+- op: replace
+  path: /spec/template/metadata/labels/app
+  value: multi-ttt
+
+# Container name
+- op: replace
+  path: /spec/template/spec/containers/0/name
+  value: multi-ttt
+
+# Image pull policy
+- op: replace
+  path: /spec/template/spec/containers/0/imagePullPolicy
+  value: IfNotPresent
+
+# Readiness probe
+- op: add
+  path: /spec/template/spec/containers/0/readinessProbe
+  value:
+    httpGet:
+      path: /ready
+      port: 3000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    failureThreshold: 2
+
+# Liveness probe
+- op: add
+  path: /spec/template/spec/containers/0/livenessProbe
+  value:
+    httpGet:
+      path: /health
+      port: 3000
+    initialDelaySeconds: 10
+    periodSeconds: 10

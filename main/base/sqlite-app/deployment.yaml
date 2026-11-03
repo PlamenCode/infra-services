@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: app-template
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: app-template
+
+  template:
+    metadata:
+      labels:
+        app: app-template
+
+    spec:
+      containers:
+        - name: app-template
+          image: example.invalid/template:placeholder
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 3000
+
+          env:
+            - name: NODE_ENV
+              value: production
+
+            - name: HOST
+              value: 0.0.0.0
+
+            - name: PORT
+              value: "3000"
+
+            - name: TZ
+              value: Europe/Sofia
+
+          volumeMounts:
+            - name: data
+              mountPath: /data
+
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: app-template-data

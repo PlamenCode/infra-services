@@ -1,0 +1,14 @@
+# Service name
+- op: replace
+  path: /metadata/name
+  value: devops-site
+
+# Service selector
+- op: replace
+  path: /spec/selector/app
+  value: devops-site
+
+# Service target port
+- op: replace
+  path: /spec/ports/0/targetPort
+  value: 8080

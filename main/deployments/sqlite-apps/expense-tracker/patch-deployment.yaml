@@ -1,0 +1,70 @@
+# Deployment name
+- op: replace
+  path: /metadata/name
+  value: expense-tracker
+
+# Deployment labels
+- op: add
+  path: /metadata/labels
+  value:
+    app: expense-tracker
+
+# Deployment selector
+- op: replace
+  path: /spec/selector/matchLabels/app
+  value: expense-tracker
+
+# Pod labels
+- op: replace
+  path: /spec/template/metadata/labels/app
+  value: expense-tracker
+
+# Container name
+- op: replace
+  path: /spec/template/spec/containers/0/name
+  value: expense-tracker
+
+# Authentication Secret
+- op: add
+  path: /spec/template/spec/containers/0/envFrom
+  value:
+    - secretRef:
+        name: expense-tracker-auth
+
+# Preserve original environment variable order
+- op: move
+  from: /spec/template/spec/containers/0/env/2
+  path: /spec/template/spec/containers/0/env/1
+
+# SQLite database path
+- op: add
+  path: /spec/template/spec/containers/0/env/3
+  value:
+    name: DB_PATH
+    value: /data/expense-tracker.db
+
+# Volume mount name
+- op: replace
+  path: /spec/template/spec/containers/0/volumeMounts/0/name
+  value: expense-tracker-data
+
+# CPU and memory resources
+- op: add
+  path: /spec/template/spec/containers/0/resources
+  value:
+    requests:
+      cpu: 20m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+# Volume name
+- op: replace
+  path: /spec/template/spec/volumes/0/name
+  value: expense-tracker-data
+
+# PVC reference
+- op: replace
+  path: /spec/template/spec/volumes/0/persistentVolumeClaim/claimName
+  value: expense-tracker-data

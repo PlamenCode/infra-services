@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: app-template
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: app-template
+
+  template:
+    metadata:
+      labels:
+        app: app-template
+
+    spec:
+      containers:
+        - name: app-template
+          image: example.invalid/template:placeholder
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80

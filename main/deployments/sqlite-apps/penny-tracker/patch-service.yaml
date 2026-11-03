@@ -1,0 +1,15 @@
+# Service name
+- op: replace
+  path: /metadata/name
+  value: penny-tracker
+
+# Service labels
+- op: add
+  path: /metadata/labels
+  value:
+    app: penny-tracker
+
+# Service selector
+- op: replace
+  path: /spec/selector/app
+  value: penny-tracker

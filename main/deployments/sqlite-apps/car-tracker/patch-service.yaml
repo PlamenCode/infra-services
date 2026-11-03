@@ -1,0 +1,18 @@
+# Service name
+- op: replace
+  path: /metadata/name
+  value: car-tracker
+
+# Preserve the original Service specification
+- op: remove
+  path: /spec/type
+
+# Service selector
+- op: replace
+  path: /spec/selector/app
+  value: car-tracker
+
+# Named container port
+- op: replace
+  path: /spec/ports/0/targetPort
+  value: http

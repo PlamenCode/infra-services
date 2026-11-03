@@ -1,0 +1,110 @@
+# Deployment name
+- op: replace
+  path: /metadata/name
+  value: car-tracker
+
+# Deployment labels
+- op: add
+  path: /metadata/labels
+  value:
+    app: car-tracker
+
+# Deployment strategy
+- op: add
+  path: /spec/strategy
+  value:
+    type: Recreate
+
+# Deployment selector
+- op: replace
+  path: /spec/selector/matchLabels/app
+  value: car-tracker
+
+# Pod labels
+- op: replace
+  path: /spec/template/metadata/labels/app
+  value: car-tracker
+
+# Disable automatic service account token mounting
+- op: add
+  path: /spec/template/spec/automountServiceAccountToken
+  value: false
+
+# Pod security context
+- op: add
+  path: /spec/template/spec/securityContext
+  value:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    runAsNonRoot: true
+
+# Container name
+- op: replace
+  path: /spec/template/spec/containers/0/name
+  value: car-tracker
+
+# Authentication Secret
+- op: add
+  path: /spec/template/spec/containers/0/envFrom
+  value:
+    - secretRef:
+        name: car-tracker-auth
+
+# Authentication cookie name
+- op: add
+  path: /spec/template/spec/containers/0/env/0
+  value:
+    name: AUTH_COOKIE_NAME
+    value: car-tracker_private_session
+
+# SQLite database path
+- op: add
+  path: /spec/template/spec/containers/0/env/4
+  value:
+    name: DB_PATH
+    value: /data/car-tracker.db
+
+# Readiness probe
+- op: add
+  path: /spec/template/spec/containers/0/readinessProbe
+  value:
+    httpGet:
+      path: /api/health
+      port: http
+    initialDelaySeconds: 5
+
+# Liveness probe
+- op: add
+  path: /spec/template/spec/containers/0/livenessProbe
+  value:
+    httpGet:
+      path: /api/health
+      port: http
+    initialDelaySeconds: 15
+
+# CPU and memory resources
+- op: add
+  path: /spec/template/spec/containers/0/resources
+  value:
+    requests:
+      cpu: 20m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Container security context
+- op: add
+  path: /spec/template/spec/containers/0/securityContext
+  value:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+
+# Existing PVC reference
+- op: replace
+  path: /spec/template/spec/volumes/0/persistentVolumeClaim/claimName
+  value: car-tracker-data

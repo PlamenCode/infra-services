@@ -1,0 +1,24 @@
+# Service name
+- op: replace
+  path: /metadata/name
+  value: multi-ttt
+
+# Service labels
+- op: add
+  path: /metadata/labels
+  value:
+    app: multi-ttt
+
+# Service selector
+- op: replace
+  path: /spec/selector/app
+  value: multi-ttt
+
+# Named HTTP port
+- op: add
+  path: /spec/ports/0/name
+  value: http
+
+# Preserve original manifest's omitted protocol
+- op: remove
+  path: /spec/ports/0/protocol

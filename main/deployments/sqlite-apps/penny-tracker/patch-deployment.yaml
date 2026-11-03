@@ -1,0 +1,122 @@
+# Deployment name
+- op: replace
+  path: /metadata/name
+  value: penny-tracker
+
+# Deployment labels
+- op: add
+  path: /metadata/labels
+  value:
+    app: penny-tracker
+
+# Deployment strategy
+- op: add
+  path: /spec/strategy
+  value:
+    type: Recreate
+
+# Deployment selector
+- op: replace
+  path: /spec/selector/matchLabels/app
+  value: penny-tracker
+
+# Pod labels
+- op: replace
+  path: /spec/template/metadata/labels/app
+  value: penny-tracker
+
+# Pod security context
+- op: add
+  path: /spec/template/spec/securityContext
+  value:
+    fsGroup: 1000
+
+# Container name
+- op: replace
+  path: /spec/template/spec/containers/0/name
+  value: penny-tracker
+
+# Container security context
+- op: add
+  path: /spec/template/spec/containers/0/securityContext
+  value:
+    runAsUser: 1000
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+
+# Authentication Secret
+- op: add
+  path: /spec/template/spec/containers/0/envFrom
+  value:
+    - secretRef:
+        name: expense-tracker-auth
+
+# Shared authentication cookie domain
+- op: add
+  path: /spec/template/spec/containers/0/env/0
+  value:
+    name: SHARED_AUTH_COOKIE_DOMAIN
+    value: .devopsplamen.work
+
+# Shared authentication cookie name
+- op: add
+  path: /spec/template/spec/containers/0/env/1
+  value:
+    name: SHARED_AUTH_COOKIE_NAME
+    value: devops_private_auth
+
+# Preserve original environment variable order
+- op: move
+  from: /spec/template/spec/containers/0/env/4
+  path: /spec/template/spec/containers/0/env/3
+
+# SQLite database path
+- op: add
+  path: /spec/template/spec/containers/0/env/5
+  value:
+    name: DB_PATH
+    value: /data/expense-tracker.db
+
+# Persistent volume mount
+- op: replace
+  path: /spec/template/spec/containers/0/volumeMounts/0/name
+  value: penny-tracker-data
+
+# Readiness probe
+- op: add
+  path: /spec/template/spec/containers/0/readinessProbe
+  value:
+    httpGet:
+      path: /api/health
+      port: http
+    initialDelaySeconds: 5
+
+# Liveness probe
+- op: add
+  path: /spec/template/spec/containers/0/livenessProbe
+  value:
+    httpGet:
+      path: /api/health
+      port: http
+    initialDelaySeconds: 15
+
+# CPU and memory resources
+- op: add
+  path: /spec/template/spec/containers/0/resources
+  value:
+    requests:
+      cpu: 20m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+# Volume name
+- op: replace
+  path: /spec/template/spec/volumes/0/name
+  value: penny-tracker-data
+
+# PVC reference
+- op: replace
+  path: /spec/template/spec/volumes/0/persistentVolumeClaim/claimName
+  value: penny-tracker-data

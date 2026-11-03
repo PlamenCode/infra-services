@@ -1,0 +1,53 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Shared base
+resources:
+  - ../../../base/static-web
+
+namespace: services
+
+# Docker image
+images:
+  - name: example.invalid/template
+    newName: plamencode/hangman
+    newTag: "5"
+
+patches:
+  # Deployment
+  - target:
+      kind: Deployment
+      name: app-template
+    options:
+      allowNameChange: true
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: hangman
+
+      - op: replace
+        path: /spec/selector/matchLabels/app
+        value: hangman
+
+      - op: replace
+        path: /spec/template/metadata/labels/app
+        value: hangman
+
+      - op: replace
+        path: /spec/template/spec/containers/0/name
+        value: hangman
+
+  # Service
+  - target:
+      kind: Service
+      name: app-template
+    options:
+      allowNameChange: true
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: hangman
+
+      - op: replace
+        path: /spec/selector/app
+        value: hangman
