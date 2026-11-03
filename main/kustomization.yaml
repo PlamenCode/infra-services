@@ -1,36 +1,44 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 resources:
-  - advanced-tik-tak-toe-deployment.yml
-  - advanced-tik-tak-toe-service.yml
-  - car-tracker-deployment.yml
-  - car-tracker-service.yml
-  - devops-site-deployment.yml
-  - devops-site-service.yml
+
+  # ==========================================
+  # Static Games
+  # ==========================================
   - deployments/static-games/dino
-  - dog-quiz-deployment.yml
-  - dog-quiz-service.yml
-  - expense-tracker-deployment.yml
-  - expense-tracker-service.yml
-  - flappy-birds-deployment.yml
-  - flappy-birds-service.yml
-  - hangman-deployment.yml
-  - hangman-service.yml
-  - hesk-db-deployment.yml
-  - hesk-db-pvc.yml
-  - hesk-db-service.yml
+  - deployments/static-games/dog-quiz
+  - deployments/static-games/flappy-birds
+  - deployments/static-games/hangman
+  - deployments/static-games/tik-tak-toe
+  - deployments/static-games/advanced-tik-tak-toe
+  - deployments/static-games/wach-a-mole
+  - deployments/static-games/wordle
+
+  # ==========================================
+  # Web Applications
+  # ==========================================
+  - deployments/web-apps/devops-site
+  - deployments/web-apps/multi-ttt
+
+  # ==========================================
+  # SQLite Applications
+  # ==========================================
+  - deployments/sqlite-apps/car-tracker
+  - deployments/sqlite-apps/expense-tracker
+  - deployments/sqlite-apps/penny-tracker
+  - deployments/sqlite-apps/tracker
+
+  # ==========================================
+  # Hesk (Original Manifests - Unchanged)
+  # ==========================================
   - hesk-deployment.yml
-  - hesk-pvc.yml
   - hesk-service.yml
-  - multi-ttt-deployment.yml
-  - multi-ttt-service.yml
-  - penny-tracker-deployment.yml
-  - penny-tracker-service.yml
-  - tik-tak-toe-deployment.yml
-  - tik-tak-toe-service.yml
-  - wach-a-mole-deployment.yml
-  - wach-a-mole-service.yml
-  - wordle-deployment.yml
-  - wordle-service.yml
-  - tracker-deployment.yml
-  - tracker-service.yml
+  - hesk-pvc.yml
+
+  # ==========================================
+  # Hesk Database (Original Manifests)
+  # ==========================================
+  - hesk-db-deployment.yml
+  - hesk-db-service.yml
+  - hesk-db-pvc.yml
