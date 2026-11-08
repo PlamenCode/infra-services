@@ -1,8 +1,10 @@
 # Immich family deployment
 
 Included in `main/kustomization.yaml`, so the existing Argo CD Application renders
-this stack in namespace `services`. Server and machine learning are pinned to
-v3.3.6; database and Valkey images match that release's official Compose file.
+this stack in namespace `services`. Server is pinned to v3.3.6; database and
+Valkey images match that release's official Compose file. Machine learning is
+disabled, with no machine-learning Deployment or Service. Face recognition and
+content-based smart search are unavailable; photo/video uploads still work.
 
 ## Required Secrets and DNS
 
@@ -101,8 +103,9 @@ The 900 GiB request is binding metadata, not an enforced Storage Box quota.
 An init container checks read/write access before Immich starts; an unavailable
 mount prevents startup rather than falling back to local photo storage.
 
-PostgreSQL (10 GiB), model cache (10 GiB), and Valkey (1 GiB) stay on
-`local-path`. The original 100 GiB `immich-library` claim remains declared to
+PostgreSQL (10 GiB) and Valkey (1 GiB) stay on `local-path`. The unused model-cache
+claim (10 GiB) remains declared to preserve existing data. The original 100 GiB
+`immich-library` claim remains declared to
 preserve any existing uploads, but is no longer mounted by the server.
 Local-path storage is tied to a node; monitor actual disk free space. Single
 replicas and Recreate rollouts mean updates interrupt service. Back up both the
