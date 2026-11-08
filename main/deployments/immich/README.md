@@ -132,6 +132,12 @@ Enable External Reachability when nodes are outside Hetzner. Nodes must resolve
 the Storage Box hostname and reach outbound TCP 445. Argo CD must be allowed to
 manage cluster-scoped PersistentVolumes. No Storage Box password is stored here.
 
+The SMB volume explicitly uses `iocharset=utf8` to support non-ASCII credentials.
+Each eligible Linux node must provide the `nls_utf8` kernel module. On Ubuntu,
+if `sudo modprobe nls_utf8` reports the module missing, install
+`sudo apt-get install "linux-modules-extra-$(uname -r)"` and load it again.
+Ensure the module is available for new kernels after node upgrades as well.
+
 For an existing installation with uploads, pause Argo automatic sync and stop
 Immich before switching. Back up PostgreSQL and the old photo volume, then use
 a temporary copy Pod mounting both claims to copy the entire library, including

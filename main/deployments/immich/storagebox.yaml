@@ -14,6 +14,7 @@ spec:
     namespace: services
     name: immich-library-storagebox
   mountOptions:
+    - iocharset=utf8
     - vers=3.1.1
     - seal
     - dir_mode=0770
