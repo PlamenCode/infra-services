@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-storagebox
+  annotations:
+    argocd.argoproj.io/sync-wave: '-1'
+spec:
+  capacity:
+    storage: 900Gi
+  accessModes: [ReadWriteMany]
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ''
+  claimRef:
+    namespace: services
+    name: immich-library-storagebox
+  mountOptions:
+    - vers=3.1.1
+    - seal
+    - dir_mode=0770
+    - file_mode=0660
+    - uid=0
+    - gid=0
+    - noperm
+    - cache=strict
+    - noserverino
+  csi:
+    driver: smb.csi.k8s.io
+    volumeHandle: 'u713495-sub1.your-storagebox.de#immich#u713495-sub1'
+    volumeAttributes:
+      source: '//u713495-sub1.your-storagebox.de/u713495-sub1'
+    nodeStageSecretRef:
+      name: immich-storagebox
+      namespace: services
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-library-storagebox
+  annotations:
+    argocd.argoproj.io/sync-wave: '-1'
+spec:
+  accessModes: [ReadWriteMany]
+  storageClassName: ''
+  volumeName: immich-storagebox
+  resources:
+    requests:
+      storage: 900Gi

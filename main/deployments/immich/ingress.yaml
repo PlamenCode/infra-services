@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: immich
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts: [immich.devopsplamen.work]
+      secretName: devopsplamen-work-tls
+  rules:
+    - host: immich.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: immich
+                port: { number: 2283 }

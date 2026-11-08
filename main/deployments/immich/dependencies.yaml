@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-postgres
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector:
+    matchLabels: { app: immich-postgres }
+  template:
+    metadata:
+      labels: { app: immich-postgres }
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: postgres
+          image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
+          ports:
+            - { name: postgres, containerPort: 5432 }
+          env:
+            - { name: POSTGRES_USER, value: immich }
+            - { name: POSTGRES_DB, value: immich }
+            - { name: POSTGRES_INITDB_ARGS, value: '--data-checksums' }
+            - { name: PGDATA, value: /var/lib/postgresql/data/pgdata }
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: immich-prod, key: DB_PASSWORD }
+          volumeMounts:
+            - { name: data, mountPath: /var/lib/postgresql/data }
+            - { name: shm, mountPath: /dev/shm }
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits: { memory: 2Gi }
+          readinessProbe:
+            exec:
+              command: [pg_isready, -U, immich, -d, immich]
+            periodSeconds: 5
+      volumes:
+        - name: data
+          persistentVolumeClaim: { claimName: immich-postgres }
+        - name: shm
+          emptyDir: { medium: Memory, sizeLimit: 128Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-postgres
+spec:
+  selector: { app: immich-postgres }
+  ports:
+    - { name: postgres, port: 5432, targetPort: postgres }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-valkey
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector:
+    matchLabels: { app: immich-valkey }
+  template:
+    metadata:
+      labels: { app: immich-valkey }
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: valkey
+          image: docker.io/valkey/valkey:9@sha256:c123e3715db63d06d4ad6964884037aa0d5d4d703939b9929954112889708e1d
+          args: [valkey-server, --appendonly, 'yes']
+          ports:
+            - { name: redis, containerPort: 6379 }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+          resources:
+            requests: { cpu: 50m, memory: 128Mi }
+            limits: { memory: 512Mi }
+          readinessProbe:
+            exec:
+              command: [valkey-cli, ping]
+            periodSeconds: 5
+      volumes:
+        - name: data
+          persistentVolumeClaim: { claimName: immich-valkey }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-valkey
+spec:
+  selector: { app: immich-valkey }
+  ports:
+    - { name: redis, port: 6379, targetPort: redis }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-machine-learning
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector:
+    matchLabels: { app: immich-machine-learning }
+  template:
+    metadata:
+      labels: { app: immich-machine-learning }
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: machine-learning
+          image: ghcr.io/immich-app/immich-machine-learning:v3.3.6
+          ports:
+            - { name: http, containerPort: 3003 }
+          volumeMounts:
+            - { name: cache, mountPath: /cache }
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits: { memory: 4Gi }
+          startupProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+      volumes:
+        - name: cache
+          persistentVolumeClaim: { claimName: immich-model-cache }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-machine-learning
+spec:
+  selector: { app: immich-machine-learning }
+  ports:
+    - { name: http, port: 3003, targetPort: http }

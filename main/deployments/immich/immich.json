@@ -1,0 +1,4 @@
+{
+  "machineLearning": { "urls": ["http://immich-machine-learning:3003"] },
+  "server": { "externalDomain": "https://immich.devopsplamen.work" }
+}

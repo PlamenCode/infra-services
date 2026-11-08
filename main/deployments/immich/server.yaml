@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels: { app: immich }
+  template:
+    metadata:
+      labels: { app: immich }
+    spec:
+      automountServiceAccountToken: false
+      initContainers:
+        - name: storage-check
+          image: busybox:1.37
+          command:
+            - sh
+            - -ec
+            - |
+              testdir=$(mktemp -d /data/.immich-storage-check.XXXXXX)
+              trap 'rm -f "$testdir/check"; rmdir "$testdir"' EXIT
+              printf 'storage works\n' > "$testdir/check"
+              grep -qx 'storage works' "$testdir/check"
+              echo 'Storage Box read/write check passed'
+          volumeMounts:
+            - { name: library, mountPath: /data }
+          resources:
+            requests: { cpu: 10m, memory: 16Mi }
+            limits: { memory: 64Mi }
+      containers:
+        - name: server
+          image: ghcr.io/immich-app/immich-server:v3.3.6
+          ports:
+            - { name: http, containerPort: 2283 }
+          env:
+            - { name: TZ, value: Europe/Sofia }
+            - { name: DB_HOSTNAME, value: immich-postgres }
+            - { name: DB_USERNAME, value: immich }
+            - { name: DB_DATABASE_NAME, value: immich }
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: immich-prod, key: DB_PASSWORD }
+            - { name: REDIS_HOSTNAME, value: immich-valkey }
+            - { name: IMMICH_CONFIG_FILE, value: /config/immich.json }
+          volumeMounts:
+            - { name: library, mountPath: /data }
+            - { name: config, mountPath: /config, readOnly: true }
+          resources:
+            requests: { cpu: 500m, memory: 1Gi }
+            limits: { memory: 4Gi }
+          startupProbe:
+            httpGet: { path: /api/server/ping, port: http }
+            periodSeconds: 10
+            failureThreshold: 180
+          readinessProbe:
+            httpGet: { path: /api/server/ping, port: http }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /api/server/ping, port: http }
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+        - name: admin-bootstrap
+          image: ghcr.io/immich-app/immich-server:v3.3.6
+          command: [node, /bootstrap/bootstrap.mjs]
+          env:
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef: { name: immich-prod, key: USERNAME }
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef: { name: immich-prod, key: PASSWORD }
+          volumeMounts:
+            - { name: bootstrap, mountPath: /bootstrap, readOnly: true }
+            - { name: bootstrap-status, mountPath: /status }
+          readinessProbe:
+            exec:
+              command: [node, -e, "require('node:fs').accessSync('/status/ready')"]
+            periodSeconds: 5
+          resources:
+            requests: { cpu: 10m, memory: 64Mi }
+            limits: { memory: 256Mi }
+      volumes:
+        - name: library
+          persistentVolumeClaim: { claimName: immich-library-storagebox }
+        - name: config
+          configMap: { name: immich-config }
+        - name: bootstrap
+          configMap: { name: immich-bootstrap }
+        - name: bootstrap-status
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich
+spec:
+  selector: { app: immich }
+  ports:
+    - { name: http, port: 2283, targetPort: http }
