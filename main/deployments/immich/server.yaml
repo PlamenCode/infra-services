@@ -13,6 +13,8 @@ spec:
       labels: { app: immich }
     spec:
       automountServiceAccountToken: false
+      # Prevent Service-generated IMMICH_PORT=tcp://... from overriding app defaults.
+      enableServiceLinks: false
       initContainers:
         - name: storage-check
           image: busybox:1.37
@@ -36,6 +38,7 @@ spec:
           ports:
             - { name: http, containerPort: 2283 }
           env:
+            - { name: IMMICH_PORT, value: '2283' }
             - { name: TZ, value: Europe/Sofia }
             - { name: DB_HOSTNAME, value: immich-postgres }
             - { name: DB_USERNAME, value: immich }
