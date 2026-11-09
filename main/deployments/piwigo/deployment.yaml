@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: piwigo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: piwigo
+  template:
+    metadata:
+      labels:
+        app: piwigo
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      initContainers:
+        - name: storage-check
+          image: busybox:1.37
+          command:
+            - sh
+            - -ec
+            - |
+              testdir=$(mktemp -d /gallery/.storage-check.XXXXXX)
+              trap 'rm -f "$testdir/check"; rmdir "$testdir"' EXIT
+              printf 'storage works\n' > "$testdir/check"
+              grep -qx 'storage works' "$testdir/check"
+              echo 'Piwigo Storage Box read/write check passed'
+          volumeMounts:
+            - name: gallery
+              mountPath: /gallery
+          resources:
+            requests: { cpu: 10m, memory: 16Mi }
+            limits: { cpu: 100m, memory: 64Mi }
+      containers:
+        - name: piwigo
+          image: ghcr.io/linuxserver/piwigo:16.4.0-ls363
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - { name: PUID, value: '1000' }
+            - { name: PGID, value: '1000' }
+            - { name: TZ, value: Europe/Sofia }
+            - { name: MAGICK_THREAD_LIMIT, value: '1' }
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: gallery
+              mountPath: /gallery
+            - name: startup
+              mountPath: /custom-cont-init.d
+              readOnly: true
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+          startupProbe:
+            httpGet: { path: /, port: http }
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 90
+          readinessProbe:
+            httpGet: { path: /, port: http }
+            periodSeconds: 10
+            timeoutSeconds: 5
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: piwigo-config
+        - name: gallery
+          persistentVolumeClaim:
+            claimName: piwigo-gallery
+        - name: startup
+          configMap:
+            name: piwigo-startup
+            defaultMode: 0555
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: piwigo
+spec:
+  selector:
+    app: piwigo
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

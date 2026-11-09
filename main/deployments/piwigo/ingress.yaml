@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: piwigo
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - piwigo.devopsplamen.work
+      secretName: devopsplamen-work-tls
+  rules:
+    - host: piwigo.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: piwigo
+                port:
+                  number: 80

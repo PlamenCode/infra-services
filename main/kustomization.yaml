@@ -20,6 +20,7 @@ resources:
   # ==========================================
   - deployments/web-apps/devops-site
   - deployments/web-apps/multi-ttt
+  - deployments/piwigo
 
   # ==========================================
   # SQLite Applications
