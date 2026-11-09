@@ -5,7 +5,6 @@ resources:
   - deployment.yaml
   - database.yaml
   - storage.yaml
-  - ingress.yaml
 configMapGenerator:
   - name: piwigo-startup
     files:

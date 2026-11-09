@@ -24,6 +24,7 @@ spec:
         - support.devopsplamen.work
         - car-tracker.devopsplamen.work
         - tracker.devopsplamen.work
+        - piwigo.devopsplamen.work
       secretName: devopsplamen-work-tls
 
   rules:
@@ -189,5 +190,16 @@ spec:
             backend:
               service:
                 name: tracker
+                port:
+                  number: 80
+
+    - host: piwigo.devopsplamen.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: piwigo
                 port:
                   number: 80

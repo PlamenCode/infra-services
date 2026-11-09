@@ -2,7 +2,8 @@
 
 Included in the root `main/kustomization.yaml`, in namespace `services`.
 URL: `https://piwigo.devopsplamen.work`, using the existing
-`devopsplamen-work-tls` Secret. DNS must point at Traefik, and that certificate
+`devopsplamen-work-tls` Secret through the shared `infra/ingress.yml` Ingress.
+DNS must point at Traefik, and that certificate
 must cover the hostname (or `*.devopsplamen.work`). No new TLS Secret is needed.
 
 The old Immich manifests have already been removed from this repository.
@@ -118,18 +119,24 @@ Then sync the existing Argo CD Application or apply Kustomize:
 ```bash
 cd ~/infra-services
 kubectl apply -k main/
+kubectl apply -f infra/ingress.yml
 kubectl -n services rollout status deployment/piwigo-db --timeout=5m
 kubectl -n services rollout status deployment/piwigo --timeout=10m
 kubectl -n services logs deployment/piwigo -c storage-check
 kubectl -n services get pvc
 ```
 
-Point DNS `piwigo.devopsplamen.work` to your ingress address. The new Ingress is
-named `piwigo` and routes to the `piwigo` Service. Remove the stale Immich route
-if it still exists; this does not remove media or database data:
+Point DNS `piwigo.devopsplamen.work` to your ingress address. The shared Ingress
+`games-ingress` routes that hostname to the `piwigo` Service. The Argo Application
+watching `main/` does not apply `infra/ingress.yml`; apply it separately or use
+the existing infra update script. After applying the shared route, remove any
+previous standalone Piwigo/Immich Ingresses to avoid duplicate hostname routes.
+Pruning is disabled in this repository's Argo Application, so removing a manifest
+alone does not delete the live object. These commands do not remove media or
+database data:
 
 ```bash
-kubectl -n services delete ingress immich --ignore-not-found
+kubectl -n services delete ingress piwigo immich --ignore-not-found
 ```
 
 ## 4. Finish Piwigo installation
