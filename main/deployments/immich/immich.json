@@ -1,4 +1,0 @@
-{
-  "machineLearning": { "enabled": false },
-  "server": { "externalDomain": "https://immich.devopsplamen.work" }
-}
