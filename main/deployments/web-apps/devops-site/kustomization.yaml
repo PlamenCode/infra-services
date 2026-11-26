@@ -11,7 +11,7 @@ namespace: services
 images:
   - name: example.invalid/template
     newName: plamencode/devops-site
-    newTag: "17"
+    newTag: "18"
 
 patches:
   # Deployment
