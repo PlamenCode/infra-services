@@ -25,6 +25,7 @@ resources:
   # ==========================================
   # SQLite Applications
   # ==========================================
+  - deployments/sqlite-apps/deck-of-pain
   - deployments/sqlite-apps/car-tracker
   - deployments/sqlite-apps/expense-tracker
   - deployments/sqlite-apps/penny-tracker
