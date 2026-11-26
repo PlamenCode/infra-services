@@ -8,4 +8,4 @@ resources:
   - ingress.yaml
 images:
   - name: plamencode/deck-of-pain-workout
-    newTag: "1"
+    newTag: "2"
