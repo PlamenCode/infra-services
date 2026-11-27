@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: piwigo
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:
@@ -71,6 +71,7 @@ spec:
             claimName: piwigo-config
         - name: gallery
           persistentVolumeClaim:
+            # Restore the gallery claim before scaling this Deployment back up.
             claimName: piwigo-gallery
         - name: startup
           configMap:

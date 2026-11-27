@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: piwigo-db
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:
